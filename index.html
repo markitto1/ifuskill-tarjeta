@@ -108,3 +108,948 @@
     grid-template-columns: 240px 1fr;
     min-height: 600px;
   }
+
+  /* ─── LEFT PANEL ─── */
+  .left-panel {
+    background: var(--white);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  /* Photo */
+  .photo-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 6px;
+  }
+  .photo-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px dashed var(--green);
+    overflow: hidden;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+  }
+  .photo-circle img {
+    width: 100%; height: 100%; object-fit: cover;
+    position: absolute; top:0; left:0;
+  }
+  .photo-placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    color: #aaa; font-size: 0.7rem; text-align: center;
+    pointer-events: none;
+  }
+  .photo-placeholder svg { width: 32px; height: 32px; }
+
+  /* Name */
+  .candidate-name {
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .name-first {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--black);
+    line-height: 1;
+  }
+  .name-last {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #555;
+  }
+
+  /* Info sections */
+  .info-section { border-top: 1px solid #e8e8e8; padding-top: 14px; }
+  .info-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .info-value {
+    font-size: 0.82rem;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  /* Salary boxes */
+  .salary-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .salary-box {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .salary-actual {
+    background: #f0f0f0;
+    border: 1.5px solid #ccc;
+    color: #333;
+  }
+  .salary-expect {
+    background: var(--green);
+    color: var(--black);
+  }
+  .salary-sub {
+    font-size: 0.55rem;
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+    opacity: 0.7;
+  }
+
+  /* Logo cliente */
+  .logo-cliente-wrap {
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    color: #aaa;
+    font-size: 0.7rem;
+    background: #fafafa;
+  }
+  .logo-cliente-wrap img {
+    max-width: 100%; max-height: 60px; object-fit: contain;
+  }
+
+  /* ─── RIGHT PANEL ─── */
+  .right-panel {
+    background: #f7f7f7;
+    padding: 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Postulación */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .puesto-bar {
+    background: var(--black);
+    color: var(--white);
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* Accesos */
+  .access-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .access-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter 0.15s;
+  }
+  .access-main:hover { filter: brightness(1.1); }
+  .access-main.black-bg { background: var(--black); }
+  .access-main.green-bg { background: var(--green); color: var(--black); }
+  .access-main svg { flex-shrink: 0; }
+
+  .access-side {
+    background: #e8e8e8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    height: 100%;
+    min-height: 50px;
+    border-left: 1px solid #ddd;
+  }
+
+  .attach-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Barlow', sans-serif;
+    transition: background 0.15s;
+  }
+  .attach-btn:hover { background: rgba(255,255,255,0.25); }
+  .attach-btn.green-bg-btn {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.2);
+    color: var(--black);
+  }
+
+  .clip-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #888;
+    transition: color 0.15s;
+  }
+  .clip-icon:hover { color: var(--black); }
+
+  .attached-badge {
+    font-size: 0.6rem;
+    background: var(--green);
+    color: var(--black);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  /* Instrucciones */
+  .instrucciones {
+    background: var(--white);
+    border-left: 3px solid var(--green);
+    padding: 14px 16px;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.8;
+  }
+  .instrucciones strong {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* ─── EDITABLE FIELDS ─── */
+  [contenteditable="true"] {
+    outline: none;
+    border-bottom: 1.5px dashed transparent;
+    transition: border-color 0.2s, background 0.2s;
+    border-radius: 2px;
+    padding: 1px 3px;
+    min-width: 30px;
+    display: inline-block;
+  }
+  [contenteditable="true"]:hover {
+    border-bottom-color: var(--green);
+    background: rgba(132, 255, 0, 0.06);
+  }
+  [contenteditable="true"]:focus {
+    border-bottom-color: var(--green);
+    background: rgba(132, 255, 0, 0.1);
+  }
+
+  /* ─── CARD FOOTER ─── */
+  .card-footer {
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    grid-column: 1 / -1;
+  }
+  .card-footer .brand span { color: var(--green); }
+  .card-footer .tagline { color: #888; font-size: 0.7rem; }
+
+  /* ─── CARD HEADER ─── */
+  .card-header {
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    grid-column: 1 / -1;
+  }
+  .card-header .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .card-header .brand span { color: var(--green); }
+  .card-header .logo-slot {
+    border: 1.5px dashed #444;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-header .logo-slot img {
+    max-width: 80px;
+    max-height: 32px;
+    object-fit: contain;
+  }
+
+  /* ─── VIDEO TOGGLE ─── */
+  #video-row { position: relative; }
+  .remove-row-btn {
+    position: absolute;
+    right: -36px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: transform 0.15s;
+    z-index: 10;
+  }
+  .remove-row-btn:hover { transform: translateY(-50%) scale(1.1); }
+
+  /* ─── MODAL PREVIEW ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-box {
+    background: var(--dark);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+  .modal-close {
+    background: none; border: none; color: #888;
+    font-size: 1.4rem; cursor: pointer; line-height: 1;
+  }
+  .modal-close:hover { color: white; }
+  .modal-body {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    min-height: 400px;
+  }
+  .modal-body iframe, .modal-body video {
+    width: 100%; height: 100%;
+    min-height: 400px;
+    border: none;
+  }
+  .modal-placeholder {
+    text-align: center;
+    color: #555;
+    font-size: 0.9rem;
+    padding: 40px;
+  }
+
+  /* ─── CLIENT VIEW (PRINT) ─── */
+  .client-view-overlay {
+    position: fixed;
+    inset: 0;
+    background: #141414;
+    z-index: 200;
+    overflow-y: auto;
+    padding: 40px 16px;
+  }
+  .client-view-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .client-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #333;
+  }
+  .client-top-bar .info {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  .client-top-bar .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: white;
+  }
+  .client-top-bar .brand span { color: var(--green); }
+
+  /* Print styles */
+  @media print {
+    #editor-bar, .remove-row-btn, .attach-btn, .clip-icon, .instrucciones { display: none !important; }
+    body { background: white; }
+    #card-wrapper { margin: 0; padding: 0; }
+    #card { box-shadow: none; }
+    [contenteditable] { border-bottom-color: transparent !important; background: transparent !important; }
+  }
+
+  /* No-editor styles for client */
+  .client-mode [contenteditable] {
+    pointer-events: none;
+    border-bottom-color: transparent !important;
+    background: transparent !important;
+  }
+  .client-mode #editor-bar { display: none; }
+  .client-mode .remove-row-btn { display: none; }
+  .client-mode .instrucciones { display: none; }
+  .client-mode .attach-btn { display: none; }
+  .client-mode .clip-icon { display: none; }
+  .client-mode .access-side { background: #e0e0e0; }
+  .client-mode .photo-circle { cursor: default; }
+  .client-mode .logo-cliente-wrap { cursor: default; }
+  .client-mode .card-header .logo-slot { cursor: default; border-style: solid; border-color: #eee; }
+
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--green);
+    color: var(--black);
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Responsive helpers */
+  .access-rows { display: flex; flex-direction: column; gap: 10px; }
+
+  /* Salary inputs */
+  .salary-input {
+    background: none;
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+    cursor: text;
+  }
+  .salary-actual .salary-input { color: #333; }
+  .salary-expect .salary-input { color: var(--black); }
+  .salary-input:focus { outline: none; }
+
+  /* hidden file inputs */
+  input[type="file"] { display: none; }
+
+  .access-side-row {
+    width: 180px;
+    min-width: 180px;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0 12px;
+    border-left: 1px solid #ccc;
+  }
+
+  .editor-hint {
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
+    margin-top: -12px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ EDITOR BAR ═══ -->
+<div id="editor-bar">
+  <div class="brand-bar">IF <span>U</span> SKILL</div>
+  <span class="badge-edit">● MODO EDICIÓN ACTIVO</span>
+  <button class="btn btn-outline" onclick="toggleVideoRow()">🎬 Quitar/Agregar Video</button>
+  <button class="btn btn-outline" onclick="previewClient()">👁 Vista Cliente</button>
+  <button class="btn btn-green" onclick="printClient()">📤 Guardar para Cliente (PDF)</button>
+</div>
+
+<!-- ═══ CARD ═══ -->
+<div id="card-wrapper">
+  <p class="editor-hint">✏️ Hacé clic en cualquier texto para editarlo · Cargá foto, CV, Informe y Video con los botones correspondientes</p>
+  <br>
+  <div id="card">
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <div class="brand">IF <span>U</span> SKILL</div>
+      <div class="logo-slot" id="logoClienteHeader" onclick="document.getElementById('fileLogoHeader').click()" title="Cargar logo del cliente">
+        <img id="logoHeaderImg" src="" alt="" style="display:none">
+        <span id="logoHeaderText">🏢 Logo cliente</span>
+      </div>
+      <input type="file" id="fileLogoHeader" accept="image/*" onchange="loadImage(this,'logoHeaderImg','logoHeaderText')">
+    </div>
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+
+      <!-- Foto -->
+      <div class="photo-wrap">
+        <div class="photo-circle" onclick="document.getElementById('filePhoto').click()" title="Cargar foto del candidato">
+          <img id="candidatePhoto" src="" alt="" style="display:none">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+            <span>Tocá para<br>cargar foto</span>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="filePhoto" accept="image/*" onchange="loadImage(this,'candidatePhoto',null)">
+
+      <!-- Nombre -->
+      <div class="candidate-name">
+        <div class="name-first" contenteditable="true" id="firstName">Nombre</div>
+        <div class="name-last" contenteditable="true" id="lastName">Apellido</div>
+      </div>
+
+      <!-- Info -->
+      <div class="info-section">
+        <div class="info-label">Edad · Ubicación</div>
+        <div class="info-value" contenteditable="true" id="edadUbicacion">— años · Ciudad</div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-label">Grupo Familiar</div>
+        <div class="info-value" contenteditable="true" id="grupoFamiliar">Estado civil, hijos</div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-label">Educación</div>
+        <div class="info-value" contenteditable="true" id="educacion">Carrera · Institución</div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-label">Idiomas</div>
+        <div class="info-value" contenteditable="true" id="idiomas">Inglés –</div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-label">Beneficios Actuales</div>
+        <div class="info-value" contenteditable="true" id="beneficios">Obra social · Beneficio 1 · Beneficio 2</div>
+      </div>
+
+      <!-- Salarios -->
+      <div class="salary-row">
+        <div class="salary-box salary-actual">
+          <input class="salary-input" id="salActual" type="text" value="$0.000.000" title="Remuneración actual">
+          <span class="salary-sub">remuneración actual</span>
+        </div>
+        <div class="salary-box salary-expect">
+          <input class="salary-input" id="salExpect" type="text" value="$0.000.000" title="Expectativa salarial">
+          <span class="salary-sub" style="opacity:0.7">expectativa salarial</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <!-- Postulación -->
+      <div>
+        <div class="section-label">Postulación</div>
+        <div class="puesto-bar" contenteditable="true" id="puestoEmpresa">Puesto – Empresa</div>
+      </div>
+
+      <!-- Accesos rápidos -->
+      <div>
+        <div class="section-label">Accesos Rápidos</div>
+        <div class="access-rows">
+
+          <!-- CV -->
+          <div class="access-row" id="cv-row">
+            <div class="access-main black-bg" onclick="openFile('cv')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Ver CV del Candidato
+              <span id="cv-badge" class="attached-badge" style="display:none">✓ Adjunto</span>
+            </div>
+            <div class="access-side-row">
+              <button class="attach-btn" onclick="document.getElementById('fileCV').click()">📎 Adjuntar PDF</button>
+              <button class="clip-icon" onclick="clearFile('cv')" title="Quitar archivo">🗑</button>
+            </div>
+          </div>
+          <input type="file" id="fileCV" accept=".pdf,video/*,image/*" onchange="attachFile(this,'cv')">
+
+          <!-- Informe -->
+          <div class="access-row" id="informe-row">
+            <div class="access-main green-bg" onclick="openFile('informe')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+              Ver Informe IF U SKILL
+              <span id="informe-badge" class="attached-badge" style="display:none">✓ Adjunto</span>
+            </div>
+            <div class="access-side-row">
+              <button class="attach-btn green-bg-btn" onclick="document.getElementById('fileInforme').click()">📎 Adjuntar PDF</button>
+              <button class="clip-icon" onclick="clearFile('informe')" title="Quitar archivo">🗑</button>
+            </div>
+          </div>
+          <input type="file" id="fileInforme" accept=".pdf,image/*" onchange="attachFile(this,'informe')">
+
+          <!-- Video -->
+          <div class="access-row" id="video-row">
+            <div class="access-main black-bg" onclick="openFile('video')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Ver Video del Candidato
+              <span id="video-badge" class="attached-badge" style="display:none">✓ Adjunto</span>
+            </div>
+            <div class="access-side-row">
+              <button class="attach-btn" onclick="document.getElementById('fileVideo').click()">🎬 Adjuntar video</button>
+              <button class="clip-icon" onclick="clearFile('video')" title="Quitar archivo">🗑</button>
+            </div>
+            <button class="remove-row-btn" onclick="toggleVideoRow()" title="Quitar fila de video">✕</button>
+          </div>
+          <input type="file" id="fileVideo" accept="video/*" onchange="attachFile(this,'video')">
+
+        </div>
+      </div>
+
+      <!-- Instrucciones -->
+      <div class="instrucciones">
+        <strong>💡 CÓMO USAR ESTA TARJETA</strong>
+        · Editá los textos tocando sobre ellos directamente<br>
+        · Cargá la foto del candidato y el logo del cliente con los placeholders<br>
+        · Tocá <b>📎</b> en cada botón para adjuntar CV, Informe y Video<br>
+        · Si el candidato no tiene video, tocá <b>"Quitar/Agregar Video"</b> en la barra de arriba<br>
+        · Cuando esté todo listo, tocá <b>"Guardar para Cliente (PDF)"</b><br>
+        · Se genera una vista limpia para imprimir como PDF — mandala por mail o WhatsApp 📱
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="card-footer">
+      <div class="brand">IF <span>U</span> SKILL</div>
+      <div class="tagline">@IFUSKILL · No somos partners, somos parte</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FILE VIEWER MODAL ═══ -->
+<div id="fileModal" class="modal-overlay" style="display:none" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="modalTitle">Archivo</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div class="modal-placeholder">No hay archivo adjunto</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CLIENT VIEW OVERLAY ═══ -->
+<div id="clientOverlay" style="display:none" class="client-view-overlay">
+  <div class="client-view-inner">
+    <div class="client-top-bar">
+      <div>
+        <div class="brand">IF <span style="color:var(--green)">U</span> SKILL</div>
+        <div class="info">Vista previa — lo que verá el cliente</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-green" onclick="printClient()">🖨 Imprimir / Guardar PDF</button>
+        <button class="btn btn-outline" onclick="closeClientView()">← Volver a editar</button>
+      </div>
+    </div>
+    <!-- card clone goes here -->
+    <div id="clientCardContainer"></div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ─── FILE STORE ───
+const files = { cv: null, informe: null, video: null };
+const fileURLs = { cv: null, informe: null, video: null };
+
+function attachFile(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+  // Revoke old URL
+  if (fileURLs[type]) URL.revokeObjectURL(fileURLs[type]);
+  files[type] = file;
+  fileURLs[type] = URL.createObjectURL(file);
+  // Show badge
+  const badge = document.getElementById(type + '-badge');
+  if (badge) { badge.style.display = 'inline'; badge.textContent = '✓ ' + file.name.substring(0,20); }
+  showToast('✓ ' + (type === 'cv' ? 'CV' : type === 'informe' ? 'Informe' : 'Video') + ' adjuntado');
+}
+
+function clearFile(type) {
+  if (fileURLs[type]) URL.revokeObjectURL(fileURLs[type]);
+  files[type] = null;
+  fileURLs[type] = null;
+  const badge = document.getElementById(type + '-badge');
+  if (badge) badge.style.display = 'none';
+  const input = document.getElementById('file' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (input) input.value = '';
+  showToast('Archivo removido');
+}
+
+function openFile(type) {
+  if (!fileURLs[type]) {
+    showToast('⚠ No hay archivo adjunto aún');
+    return;
+  }
+  const modal = document.getElementById('fileModal');
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+  modal.style.display = 'flex';
+
+  if (type === 'cv') {
+    title.textContent = '📄 CV del Candidato';
+    body.innerHTML = `<iframe src="${fileURLs[type]}" style="width:100%;min-height:520px;border:none"></iframe>`;
+  } else if (type === 'informe') {
+    title.textContent = '📊 Informe IF U SKILL';
+    body.innerHTML = `<iframe src="${fileURLs[type]}" style="width:100%;min-height:520px;border:none"></iframe>`;
+  } else if (type === 'video') {
+    title.textContent = '🎬 Video del Candidato';
+    body.innerHTML = `<video controls autoplay style="width:100%;max-height:520px;background:#000"><source src="${fileURLs[type]}"></video>`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('fileModal').style.display = 'none';
+  document.getElementById('modalBody').innerHTML = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('fileModal')) closeModal();
+}
+
+// ─── IMAGE LOADERS ───
+function loadImage(input, imgId, textId) {
+  const file = input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const img = document.getElementById(imgId);
+  img.src = url;
+  img.style.display = 'block';
+  if (textId) {
+    const el = document.getElementById(textId);
+    if (el) el.style.display = 'none';
+  }
+  // Also hide placeholder text inside photo-circle
+  const placeholder = img.parentElement && img.parentElement.querySelector('.photo-placeholder');
+  if (placeholder) placeholder.style.display = 'none';
+  showToast('✓ Imagen cargada');
+}
+
+// ─── VIDEO ROW TOGGLE ───
+let videoVisible = true;
+function toggleVideoRow() {
+  const row = document.getElementById('video-row');
+  videoVisible = !videoVisible;
+  row.style.display = videoVisible ? 'flex' : 'none';
+  showToast(videoVisible ? 'Fila de video restaurada' : 'Fila de video ocultada');
+}
+
+// ─── CLIENT VIEW ───
+function previewClient() {
+  const overlay = document.getElementById('clientOverlay');
+  const container = document.getElementById('clientCardContainer');
+  overlay.style.display = 'block';
+  // Clone the card
+  const card = document.getElementById('card');
+  const clone = card.cloneNode(true);
+  // Remove editor-only elements from clone
+  clone.querySelectorAll('.remove-row-btn, .attach-btn, .clip-icon, .instrucciones, input[type="file"]').forEach(el => el.remove());
+  // Disable contenteditable
+  clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  // Fix photo + logo in clone (copy src)
+  const origPhoto = document.getElementById('candidatePhoto');
+  const clonePhoto = clone.querySelector('#candidatePhoto');
+  if (clonePhoto && origPhoto.src) clonePhoto.src = origPhoto.src;
+
+  const origLogo = document.getElementById('logoHeaderImg');
+  const cloneLogo = clone.querySelector('#logoHeaderImg');
+  if (cloneLogo && origLogo.src) cloneLogo.src = origLogo.src;
+
+  // Restore display of placeholder if no photo
+  if (origPhoto.style.display === 'none') {
+    const cp = clone.querySelector('#candidatePhoto');
+    if (cp) cp.style.display = 'none';
+    const pp = clone.querySelector('.photo-placeholder');
+    if (pp) pp.style.display = 'flex';
+  }
+
+  // Wire up click handlers on access rows for client (use fileURLs)
+  clone.querySelectorAll('.access-main').forEach(el => {
+    const parent = el.parentElement;
+    const parentId = parent && parent.id;
+    if (parentId === 'cv-row') el.onclick = () => openFile('cv');
+    else if (parentId === 'informe-row') el.onclick = () => openFile('informe');
+    else if (parentId === 'video-row') el.onclick = () => openFile('video');
+  });
+
+  // Hide side columns
+  clone.querySelectorAll('.access-side-row').forEach(el => el.style.display = 'none');
+
+  container.innerHTML = '';
+  container.appendChild(clone);
+}
+
+function closeClientView() {
+  document.getElementById('clientOverlay').style.display = 'none';
+}
+
+// ─── PRINT (SAVE AS PDF) ───
+function printClient() {
+  // We'll open a new window with a clean print version
+  const card = document.getElementById('card');
+  const clone = card.cloneNode(true);
+  // Strip editor-only stuff
+  clone.querySelectorAll('.remove-row-btn, .attach-btn, .clip-icon, .instrucciones, input[type="file"]').forEach(el => el.remove());
+  clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  // Copy image srcs
+  const origPhoto = document.getElementById('candidatePhoto');
+  const clonePhoto = clone.querySelector('#candidatePhoto');
+  if (clonePhoto) { clonePhoto.src = origPhoto.src; }
+  const origLogo = document.getElementById('logoHeaderImg');
+  const cloneLogo = clone.querySelector('#logoHeaderImg');
+  if (cloneLogo && origLogo) { cloneLogo.src = origLogo.src; }
+  // Hide side columns
+  clone.querySelectorAll('.access-side-row').forEach(el => el.style.display = 'none');
+
+  // Build print window
+  const pw = window.open('', '_blank');
+  pw.document.write(`<!DOCTYPE html><html lang="es"><head>
+  <meta charset="UTF-8">
+  <title>IF U SKILL – ${document.getElementById('firstName').textContent} ${document.getElementById('lastName').textContent}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap');
+    ${document.querySelector('style').textContent}
+    body { background: white; margin: 0; }
+    #card { box-shadow: none !important; }
+    .editor-hint, #editor-bar { display: none !important; }
+    @media print {
+      @page { margin: 10mm; size: A4 landscape; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+  </head><body>
+  <div style="max-width:960px;margin:0 auto">
+  ${clone.outerHTML}
+  </div>
+  <script>
+    // Re-wire file open buttons for print preview
+    window.onload = () => {
+      // No file access in new window — buttons show info message
+      document.querySelectorAll('.access-main').forEach(el => {
+        el.style.cursor = 'default';
+      });
+    };
+  <\/script>
+  </body></html>`);
+  pw.document.close();
+  pw.onload = () => {
+    setTimeout(() => pw.print(), 500);
+  };
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Keyboard shortcut: Escape closes modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeClientView();
+  }
+});
+</script>
+</body>
+</html>
