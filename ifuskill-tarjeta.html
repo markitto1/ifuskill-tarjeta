@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IF U SKILL – Editor de Tarjeta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap');
+
+  :root {
+    --green: #84FF00;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --white: #ffffff;
+    --border: #333333;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: #141414;
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ─── EDITOR BAR ─── */
+  #editor-bar {
+    background: var(--black);
+    border-bottom: 2px solid var(--green);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  .brand-bar {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-right: auto;
+  }
+  .brand-bar span { color: var(--green); }
+  .badge-edit {
+    background: var(--green);
+    color: var(--black);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--white);
+  }
+  .btn-outline:hover { border-color: var(--green); color: var(--green); }
+  .btn-green { background: var(--green); color: var(--black); }
+  .btn-green:hover { background: #9fff1a; transform: translateY(-1px); }
+
+  /* ─── LINKS PANEL ─── */
+  #links-panel {
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 14px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .link-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .link-field label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .link-field input {
+    background: #0a0a0a;
+    border: 1.5px solid #333;
+    border-radius: 4px;
+    color: var(--white);
+    font-size: 0.78rem;
+    padding: 6px 10px;
+    font-family: 'Barlow', sans-serif;
+    transition: border-color 0.15s;
+  }
+  .link-field input:focus { outline: none; border-color: var(--green); }
+  .link-field input::placeholder { color: #555; }
+  .link-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+  }
+  .link-toggle input[type="checkbox"] { accent-color: var(--green); width: 14px; height: 14px; }
+  .link-toggle label { font-size: 0.7rem; color: #888; cursor: pointer; }
+
+  /* ─── CARD ─── */
+  #card-wrapper {
+    max-width: 960px;
+    margin: 24px auto;
+    padding: 0 16px 60px;
+  }
+  .editor-hint {
+    font-size: 0.65rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  #card {
+    background: #f5f5f5;
+    color: var(--black);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 600px;
+  }
+
+  /* CARD HEADER */
+  .card-header {
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    grid-column: 1 / -1;
+  }
+  .card-header .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .card-header .brand span { color: var(--green); }
+  .card-header .logo-slot {
+    border: 1.5px dashed #444;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-header .logo-slot img { max-width: 80px; max-height: 32px; object-fit: contain; }
+
+  /* LEFT PANEL */
+  .left-panel {
+    background: var(--white);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-right: 1px solid #e0e0e0;
+  }
+  .photo-wrap { position: relative; width: 130px; height: 130px; margin: 0 auto 6px; }
+  .photo-circle {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 3px dashed var(--green);
+    overflow: hidden;
+    background: #eee;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative;
+  }
+  .photo-circle img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+  .photo-placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    color: #aaa; font-size: 0.7rem; text-align: center; pointer-events: none;
+  }
+  .photo-placeholder svg { width: 32px; height: 32px; }
+  .candidate-name { text-align: center; font-family: 'Barlow Condensed', sans-serif; }
+  .name-first { font-size: 1.6rem; font-weight: 900; color: var(--black); line-height: 1; }
+  .name-last { font-size: 1.1rem; font-weight: 400; color: #555; }
+  .info-section { border-top: 1px solid #e8e8e8; padding-top: 14px; }
+  .info-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 2px;
+    color: var(--green); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .info-value { font-size: 0.82rem; color: #333; line-height: 1.5; }
+  .salary-row { display: flex; gap: 8px; margin-top: 4px; }
+  .salary-box {
+    flex: 1; text-align: center; padding: 8px 6px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem;
+  }
+  .salary-actual { background: #f0f0f0; border: 1.5px solid #ccc; color: #333; }
+  .salary-expect { background: var(--green); color: var(--black); }
+  .salary-sub { font-size: 0.55rem; font-weight: 400; display: block; margin-top: 2px; opacity: 0.7; }
+  .salary-input {
+    background: none; border: none;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem;
+    width: 100%; text-align: center; cursor: text;
+  }
+  .salary-actual .salary-input { color: #333; }
+  .salary-expect .salary-input { color: var(--black); }
+  .salary-input:focus { outline: none; }
+
+  /* RIGHT PANEL */
+  .right-panel {
+    background: #f7f7f7;
+    padding: 28px 28px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 2px;
+    color: var(--green); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .puesto-bar {
+    background: var(--black); color: var(--white);
+    padding: 14px 18px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 1.15rem; letter-spacing: 0.5px;
+  }
+  .access-rows { display: flex; flex-direction: column; gap: 10px; }
+  .access-row {
+    display: flex; align-items: stretch;
+    border-radius: 4px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .access-main {
+    flex: 1; display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem;
+    color: var(--white); text-decoration: none; cursor: pointer;
+    transition: filter 0.15s;
+  }
+  .access-main:hover { filter: brightness(1.12); }
+  .access-main.black-bg { background: var(--black); }
+  .access-main.green-bg { background: var(--green); color: var(--black); }
+  .access-main svg { flex-shrink: 0; }
+  .attached-badge {
+    font-size: 0.6rem; background: var(--green); color: var(--black);
+    padding: 2px 6px; border-radius: 10px; font-weight: 700;
+  }
+  .no-link-badge {
+    font-size: 0.6rem; background: #555; color: #ccc;
+    padding: 2px 6px; border-radius: 10px; font-weight: 700;
+  }
+  #video-row { position: relative; }
+  .remove-row-btn {
+    position: absolute; right: -36px; top: 50%; transform: translateY(-50%);
+    background: #ff4444; color: white; border: none; border-radius: 50%;
+    width: 26px; height: 26px; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; transition: transform 0.15s; z-index: 10;
+  }
+  .remove-row-btn:hover { transform: translateY(-50%) scale(1.1); }
+
+  /* instrucciones */
+  .instrucciones {
+    background: var(--white); border-left: 3px solid var(--green);
+    padding: 14px 16px; border-radius: 0 4px 4px 0;
+    font-size: 0.75rem; color: #555; line-height: 1.8;
+  }
+  .instrucciones strong {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem;
+    font-weight: 700; color: var(--black); display: flex;
+    align-items: center; gap: 6px; margin-bottom: 6px;
+  }
+
+  /* CARD FOOTER */
+  .card-footer {
+    background: var(--black); color: var(--white);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 1px;
+    grid-column: 1 / -1;
+  }
+  .card-footer .brand span { color: var(--green); }
+  .card-footer .tagline { color: #888; font-size: 0.7rem; }
+
+  /* EDITABLE */
+  [contenteditable="true"] {
+    outline: none; border-bottom: 1.5px dashed transparent;
+    transition: border-color 0.2s, background 0.2s;
+    border-radius: 2px; padding: 1px 3px; min-width: 30px; display: inline-block;
+  }
+  [contenteditable="true"]:hover { border-bottom-color: var(--green); background: rgba(132,255,0,0.06); }
+  [contenteditable="true"]:focus { border-bottom-color: var(--green); background: rgba(132,255,0,0.1); }
+
+  /* FILE INPUT */
+  input[type="file"] { display: none; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+  .modal-box {
+    background: var(--dark); border-radius: 8px; border: 1px solid var(--border);
+    width: 100%; max-width: 900px; max-height: 90vh; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .modal-header {
+    padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;
+  }
+  .modal-close { background: none; border: none; color: #888; font-size: 1.4rem; cursor: pointer; }
+  .modal-close:hover { color: white; }
+  .modal-body {
+    flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center;
+    background: #000; min-height: 400px;
+  }
+  .modal-body iframe, .modal-body video { width: 100%; height: 100%; min-height: 400px; border: none; }
+  .modal-placeholder { text-align: center; color: #555; font-size: 0.9rem; padding: 40px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--green); color: var(--black);
+    padding: 12px 20px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;
+    z-index: 9999; transform: translateY(80px); opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* DOWNLOAD MODAL */
+  .dl-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; padding: 20px;
+  }
+  .dl-box {
+    background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
+    padding: 32px; max-width: 560px; width: 100%;
+  }
+  .dl-box h2 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .dl-box h2 span { color: var(--green); }
+  .dl-box p { color: #888; font-size: 0.82rem; margin-bottom: 20px; line-height: 1.6; }
+  .dl-filename {
+    background: #0a0a0a; border: 1.5px solid #333; border-radius: 4px;
+    color: var(--white); font-size: 0.85rem; padding: 8px 12px;
+    font-family: 'Barlow', sans-serif; width: 100%; margin-bottom: 16px;
+  }
+  .dl-filename:focus { outline: none; border-color: var(--green); }
+  .dl-actions { display: flex; gap: 10px; }
+  .dl-steps {
+    background: #111; border-radius: 4px; padding: 14px 16px;
+    margin-top: 16px; font-size: 0.78rem; color: #aaa; line-height: 2;
+  }
+  .dl-steps strong { color: var(--green); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; }
+  .dl-steps a { color: var(--green); }
+  .dl-steps code {
+    background: #222; padding: 1px 6px; border-radius: 3px;
+    font-size: 0.75rem; color: #84FF00;
+  }
+</style>
+</head>
+<body>
+
+<!-- EDITOR BAR -->
+<div id="editor-bar">
+  <div class="brand-bar">IF <span>U</span> SKILL</div>
+  <span class="badge-edit">● MODO EDICIÓN</span>
+  <button class="btn btn-outline" onclick="toggleVideoRow()">🎬 Quitar/Agregar Video</button>
+  <button class="btn btn-outline" onclick="previewCard()">👁 Vista Previa</button>
+  <button class="btn btn-green" onclick="openDownloadModal()">📥 Generar HTML Candidato</button>
+</div>
+
+<!-- LINKS PANEL -->
+<div id="links-panel">
+  <div class="link-field">
+    <label>🔗 Link CV (Google Drive / PDF)</label>
+    <input type="url" id="link-cv" placeholder="https://drive.google.com/file/d/..." oninput="updateBadges()">
+    <div class="link-toggle">
+      <input type="checkbox" id="show-cv" checked onchange="updateBadges()">
+      <label for="show-cv">Mostrar botón CV</label>
+    </div>
+  </div>
+  <div class="link-field">
+    <label>🔗 Link Informe (Google Drive / PDF)</label>
+    <input type="url" id="link-informe" placeholder="https://drive.google.com/file/d/..." oninput="updateBadges()">
+    <div class="link-toggle">
+      <input type="checkbox" id="show-informe" checked onchange="updateBadges()">
+      <label for="show-informe">Mostrar botón Informe</label>
+    </div>
+  </div>
+  <div class="link-field">
+    <label>🔗 Link Video (Drive / YouTube / Vimeo)</label>
+    <input type="url" id="link-video" placeholder="https://drive.google.com/file/d/..." oninput="updateBadges()">
+    <div class="link-toggle">
+      <input type="checkbox" id="show-video" checked onchange="toggleVideoRow(true)">
+      <label for="show-video">Mostrar botón Video</label>
+    </div>
+  </div>
+</div>
+
+<!-- CARD -->
+<div id="card-wrapper">
+  <p class="editor-hint">✏️ Clic en cualquier texto para editar · Cargá foto y logo con los placeholders · Pegá los links de Drive arriba</p>
+  <div id="card">
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <div class="brand">IF <span>U</span> SKILL</div>
+      <div class="logo-slot" id="logoSlot" onclick="document.getElementById('fileLogoHeader').click()" title="Cargar logo del cliente">
+        <img id="logoHeaderImg" src="" alt="" style="display:none">
+        <span id="logoHeaderText">🏢 Logo cliente</span>
+      </div>
+      <input type="file" id="fileLogoHeader" accept="image/*" onchange="loadImage(this,'logoHeaderImg','logoHeaderText')">
+    </div>
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="photo-wrap">
+        <div class="photo-circle" onclick="document.getElementById('filePhoto').click()" title="Cargar foto">
+          <img id="candidatePhoto" src="" alt="" style="display:none">
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+            <span>Tocá para<br>cargar foto</span>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="filePhoto" accept="image/*" onchange="loadImage(this,'candidatePhoto',null)">
+
+      <div class="candidate-name">
+        <div class="name-first" contenteditable="true" id="firstName">Nombre</div>
+        <div class="name-last" contenteditable="true" id="lastName">Apellido</div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-label">Edad · Ubicación</div>
+        <div class="info-value" contenteditable="true" id="edadUbicacion">— años · Ciudad</div>
+      </div>
+      <div class="info-section">
+        <div class="info-label">Grupo Familiar</div>
+        <div class="info-value" contenteditable="true" id="grupoFamiliar">Estado civil, hijos</div>
+      </div>
+      <div class="info-section">
+        <div class="info-label">Educación</div>
+        <div class="info-value" contenteditable="true" id="educacion">Carrera · Institución</div>
+      </div>
+      <div class="info-section">
+        <div class="info-label">Idiomas</div>
+        <div class="info-value" contenteditable="true" id="idiomas">Inglés –</div>
+      </div>
+      <div class="info-section">
+        <div class="info-label">Beneficios Actuales</div>
+        <div class="info-value" contenteditable="true" id="beneficios">Obra social · Beneficio 1 · Beneficio 2</div>
+      </div>
+
+      <div class="salary-row">
+        <div class="salary-box salary-actual">
+          <input class="salary-input" id="salActual" type="text" value="$0.000.000">
+          <span class="salary-sub">remuneración actual</span>
+        </div>
+        <div class="salary-box salary-expect">
+          <input class="salary-input" id="salExpect" type="text" value="$0.000.000">
+          <span class="salary-sub" style="opacity:0.7">expectativa salarial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div>
+        <div class="section-label">Postulación</div>
+        <div class="puesto-bar" contenteditable="true" id="puestoEmpresa">Puesto – Empresa</div>
+      </div>
+
+      <div>
+        <div class="section-label">Accesos Rápidos</div>
+        <div class="access-rows">
+
+          <!-- CV -->
+          <div class="access-row" id="cv-row">
+            <div class="access-main black-bg" onclick="openLink('cv')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Ver CV del Candidato
+              <span id="cv-badge" class="no-link-badge">Sin link</span>
+            </div>
+          </div>
+
+          <!-- Informe -->
+          <div class="access-row" id="informe-row">
+            <div class="access-main green-bg" onclick="openLink('informe')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+              Ver Informe IF U SKILL
+              <span id="informe-badge" class="no-link-badge">Sin link</span>
+            </div>
+          </div>
+
+          <!-- Video -->
+          <div class="access-row" id="video-row">
+            <div class="access-main black-bg" onclick="openLink('video')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Ver Video del Candidato
+              <span id="video-badge" class="no-link-badge">Sin link</span>
+            </div>
+            <button class="remove-row-btn" onclick="toggleVideoRow()" title="Quitar video">✕</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="instrucciones">
+        <strong>💡 CÓMO USAR</strong>
+        · Editá los textos haciendo clic sobre ellos<br>
+        · Cargá la foto del candidato y el logo del cliente<br>
+        · Pegá los links de Google Drive arriba (CV, Informe, Video)<br>
+        · Hacé los links públicos en Drive antes de pegarlos<br>
+        · Cuando esté listo, tocá <b>"Generar HTML Candidato"</b><br>
+        · Descargás el HTML y lo subís al repo de GitHub
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="card-footer">
+      <div class="brand">IF <span>U</span> SKILL</div>
+      <div class="tagline">@IFUSKILL · No somos partners, somos parte</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL DESCARGAR -->
+<div id="downloadModal" class="dl-modal" style="display:none">
+  <div class="dl-box">
+    <h2>📥 Generar HTML del <span>Candidato</span></h2>
+    <p>Se descarga un archivo HTML listo para subir al repo de GitHub. Cada candidato tiene su propia página y URL.</p>
+
+    <label style="font-size:0.72rem;color:#888;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Nombre del archivo</label>
+    <input type="text" class="dl-filename" id="dl-filename" placeholder="juan-perez" oninput="updatePreviewUrl()">
+    <div style="font-size:0.72rem;color:#555;margin-bottom:16px">
+      URL: <span id="preview-url" style="color:var(--green)">markitto1.github.io/ifuskill-tarjeta/[nombre].html</span>
+    </div>
+
+    <div class="dl-actions">
+      <button class="btn btn-green" onclick="generateAndDownload()" style="flex:1">⬇️ Descargar HTML</button>
+      <button class="btn btn-outline" onclick="closeDownloadModal()">Cancelar</button>
+    </div>
+
+    <div class="dl-steps">
+      <strong>DESPUÉS DE DESCARGAR:</strong><br>
+      1. Andá a <a href="https://github.com/markitto1/ifuskill-tarjeta" target="_blank">github.com/markitto1/ifuskill-tarjeta</a><br>
+      2. Clic en <code>Add file → Upload files</code><br>
+      3. Subís el HTML descargado<br>
+      4. Clic en <code>Commit changes</code><br>
+      5. La URL queda activa en ~1 minuto ✅
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ─── ESTADO ───
+const links = { cv: '', informe: '', video: '' };
+let videoVisible = true;
+let photoDataUrl = null;
+let logoDataUrl = null;
+
+// ─── LINKS Y BADGES ───
+function updateBadges() {
+  links.cv = document.getElementById('link-cv').value.trim();
+  links.informe = document.getElementById('link-informe').value.trim();
+  links.video = document.getElementById('link-video').value.trim();
+
+  setBadge('cv-badge', links.cv);
+  setBadge('informe-badge', links.informe);
+  setBadge('video-badge', links.video);
+}
+
+function setBadge(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val) {
+    el.className = 'attached-badge';
+    el.textContent = '✓ Link ok';
+  } else {
+    el.className = 'no-link-badge';
+    el.textContent = 'Sin link';
+  }
+}
+
+function openLink(type) {
+  const url = links[type];
+  if (!url) { showToast('⚠ Pegá el link de Drive primero'); return; }
+  window.open(url, '_blank');
+}
+
+// ─── IMÁGENES ───
+function loadImage(input, imgId, textId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    const img = document.getElementById(imgId);
+    img.src = dataUrl;
+    img.style.display = 'block';
+    if (imgId === 'candidatePhoto') {
+      photoDataUrl = dataUrl;
+      const ph = img.parentElement.querySelector('.photo-placeholder');
+      if (ph) ph.style.display = 'none';
+    }
+    if (imgId === 'logoHeaderImg') {
+      logoDataUrl = dataUrl;
+      if (textId) document.getElementById(textId).style.display = 'none';
+    }
+    showToast('✓ Imagen cargada');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── VIDEO TOGGLE ───
+function toggleVideoRow(fromCheckbox) {
+  const checkbox = document.getElementById('show-video');
+  const row = document.getElementById('video-row');
+  if (fromCheckbox) {
+    videoVisible = checkbox.checked;
+  } else {
+    videoVisible = !videoVisible;
+    checkbox.checked = videoVisible;
+  }
+  row.style.display = videoVisible ? 'flex' : 'none';
+  showToast(videoVisible ? 'Fila de video activada' : 'Fila de video ocultada');
+}
+
+// ─── VISTA PREVIA ───
+function previewCard() {
+  // Open in a new tab as a proper preview
+  const html = buildFullHTML();
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+function closePreview() {
+  document.getElementById('previewModal').style.display = 'none';
+}
+
+// ─── DOWNLOAD MODAL ───
+function openDownloadModal() {
+  // Auto-suggest filename from candidate name
+  const first = document.getElementById('firstName').textContent.trim().toLowerCase().replace(/\s+/g,'-');
+  const last = document.getElementById('lastName').textContent.trim().toLowerCase().replace(/\s+/g,'-');
+  const suggested = (first !== 'nombre' && last !== 'apellido') ? `${first}-${last}` : '';
+  document.getElementById('dl-filename').value = suggested;
+  updatePreviewUrl();
+  document.getElementById('downloadModal').style.display = 'flex';
+}
+function closeDownloadModal() {
+  document.getElementById('downloadModal').style.display = 'none';
+}
+function updatePreviewUrl() {
+  const val = document.getElementById('dl-filename').value.trim() || '[nombre]';
+  document.getElementById('preview-url').textContent = `markitto1.github.io/ifuskill-tarjeta/${val}.html`;
+}
+
+// ─── GENERAR Y DESCARGAR HTML ───
+function generateAndDownload() {
+  const filename = document.getElementById('dl-filename').value.trim();
+  if (!filename) { showToast('⚠ Escribí el nombre del archivo'); return; }
+
+  const html = buildFullHTML();
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  closeDownloadModal();
+  showToast('✓ HTML descargado — ahora subilo al repo');
+}
+
+// ─── CONSTRUIR HTML DEL CANDIDATO ───
+function getData() {
+  return {
+    firstName: document.getElementById('firstName').textContent,
+    lastName:  document.getElementById('lastName').textContent,
+    edadUbicacion: document.getElementById('edadUbicacion').textContent,
+    grupoFamiliar:  document.getElementById('grupoFamiliar').textContent,
+    educacion:  document.getElementById('educacion').textContent,
+    idiomas:    document.getElementById('idiomas').textContent,
+    beneficios: document.getElementById('beneficios').textContent,
+    salActual:  document.getElementById('salActual').value,
+    salExpect:  document.getElementById('salExpect').value,
+    puesto:     document.getElementById('puestoEmpresa').textContent,
+    linkCV:     links.cv,
+    linkInforme: links.informe,
+    linkVideo:  links.video,
+    showCV:     document.getElementById('show-cv').checked,
+    showInforme: document.getElementById('show-informe').checked,
+    showVideo:  videoVisible,
+    photo:      photoDataUrl,
+    logo:       logoDataUrl,
+  };
+}
+
+function buildFullHTML() {
+  const d = getData();
+  const title = `${d.firstName} ${d.lastName} – IF U SKILL`;
+
+  const cvRow = !d.showCV ? '' : `
+    <div class="access-row">
+      <a class="access-main black-bg" href="${d.linkCV || '#'}" target="_blank" ${!d.linkCV ? 'onclick="alert(\'Sin link adjunto\');return false;"' : ''}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Ver CV del Candidato
+        ${d.linkCV ? '<span class="attached-badge">✓ Ver</span>' : ''}
+      </a>
+    </div>`;
+
+  const informeRow = !d.showInforme ? '' : `
+    <div class="access-row">
+      <a class="access-main green-bg" href="${d.linkInforme || '#'}" target="_blank" ${!d.linkInforme ? 'onclick="alert(\'Sin link adjunto\');return false;"' : ''}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        Ver Informe IF U SKILL
+        ${d.linkInforme ? '<span class="attached-badge" style="background:#0a0a0a;color:#84FF00">✓ Ver</span>' : ''}
+      </a>
+    </div>`;
+
+  const videoRow = !d.showVideo ? '' : `
+    <div class="access-row">
+      <a class="access-main black-bg" href="${d.linkVideo || '#'}" target="_blank" ${!d.linkVideo ? 'onclick="alert(\'Sin link adjunto\');return false;"' : ''}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Ver Video del Candidato
+        ${d.linkVideo ? '<span class="attached-badge">✓ Ver</span>' : ''}
+      </a>
+    </div>`;
+
+  const photoHtml = d.photo
+    ? `<img src="${d.photo}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid #84FF00;display:block;margin:0 auto 6px">`
+    : `<div style="width:130px;height:130px;border-radius:50%;border:3px dashed #84FF00;background:#eee;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:#aaa;font-size:0.7rem;text-align:center">Sin foto</div>`;
+
+  const logoHtml = d.logo
+    ? `<img src="${d.logo}" style="max-width:80px;max-height:32px;object-fit:contain">`
+    : '';
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap');
+  :root { --green: #84FF00; --black: #0a0a0a; --white: #ffffff; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Barlow', sans-serif; background: #141414; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
+  .card-wrap { max-width: 960px; width: 100%; }
+  .card { background: #f5f5f5; color: var(--black); border-radius: 6px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); display: grid; grid-template-columns: 240px 1fr; }
+  .card-header { background: var(--black); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; grid-column: 1 / -1; }
+  .card-header .brand { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--white); letter-spacing: 1px; }
+  .card-header .brand span { color: var(--green); }
+  .left-panel { background: var(--white); padding: 28px 20px; display: flex; flex-direction: column; gap: 18px; border-right: 1px solid #e0e0e0; }
+  .candidate-name { text-align: center; font-family: 'Barlow Condensed', sans-serif; }
+  .name-first { font-size: 1.6rem; font-weight: 900; color: var(--black); line-height: 1; }
+  .name-last { font-size: 1.1rem; font-weight: 400; color: #555; }
+  .info-section { border-top: 1px solid #e8e8e8; padding-top: 14px; }
+  .info-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+  .info-value { font-size: 0.82rem; color: #333; line-height: 1.5; }
+  .salary-row { display: flex; gap: 8px; margin-top: 4px; }
+  .salary-box { flex: 1; text-align: center; padding: 8px 6px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; }
+  .salary-actual { background: #f0f0f0; border: 1.5px solid #ccc; color: #333; }
+  .salary-expect { background: var(--green); color: var(--black); }
+  .salary-sub { font-size: 0.55rem; font-weight: 400; display: block; margin-top: 2px; opacity: 0.7; }
+  .right-panel { background: #f7f7f7; padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+  .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 8px; }
+  .puesto-bar { background: var(--black); color: var(--white); padding: 14px 18px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; }
+  .access-rows { display: flex; flex-direction: column; gap: 10px; }
+  .access-row { display: flex; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .access-main { flex: 1; display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); text-decoration: none; transition: filter 0.15s; }
+  .access-main:hover { filter: brightness(1.12); }
+  .access-main.black-bg { background: var(--black); }
+  .access-main.green-bg { background: var(--green); color: var(--black); }
+  .attached-badge { font-size: 0.6rem; background: var(--green); color: var(--black); padding: 2px 6px; border-radius: 10px; font-weight: 700; }
+  .card-footer { background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 1px; grid-column: 1 / -1; }
+  .card-footer .brand span { color: var(--green); }
+  .card-footer .tagline { color: #888; font-size: 0.7rem; }
+  @media print { body { background: white; padding: 0; } .card { box-shadow: none; } @page { margin: 10mm; size: A4 landscape; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="card-wrap">
+<div class="card">
+  <div class="card-header">
+    <div class="brand">IF <span>U</span> SKILL</div>
+    <div>${logoHtml}</div>
+  </div>
+  <div class="left-panel">
+    ${photoHtml}
+    <div class="candidate-name">
+      <div class="name-first">${d.firstName}</div>
+      <div class="name-last">${d.lastName}</div>
+    </div>
+    <div class="info-section"><div class="info-label">Edad · Ubicación</div><div class="info-value">${d.edadUbicacion}</div></div>
+    <div class="info-section"><div class="info-label">Grupo Familiar</div><div class="info-value">${d.grupoFamiliar}</div></div>
+    <div class="info-section"><div class="info-label">Educación</div><div class="info-value">${d.educacion}</div></div>
+    <div class="info-section"><div class="info-label">Idiomas</div><div class="info-value">${d.idiomas}</div></div>
+    <div class="info-section"><div class="info-label">Beneficios Actuales</div><div class="info-value">${d.beneficios}</div></div>
+    <div class="salary-row">
+      <div class="salary-box salary-actual"><span style="font-family:'Barlow Condensed';font-weight:700;font-size:.8rem;color:#333">${d.salActual}</span><span class="salary-sub">remuneración actual</span></div>
+      <div class="salary-box salary-expect"><span style="font-family:'Barlow Condensed';font-weight:700;font-size:.8rem;color:#0a0a0a">${d.salExpect}</span><span class="salary-sub" style="opacity:.7">expectativa salarial</span></div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <div>
+      <div class="section-label">Postulación</div>
+      <div class="puesto-bar">${d.puesto}</div>
+    </div>
+    <div>
+      <div class="section-label">Accesos Rápidos</div>
+      <div class="access-rows">
+        ${cvRow}
+        ${informeRow}
+        ${videoRow}
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="brand">IF <span>U</span> SKILL</div>
+    <div class="tagline">@IFUSKILL · No somos partners, somos parte</div>
+  </div>
+</div>
+</div>
+</body>
+</html>`;
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─── KEYBOARD ───
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePreview(); closeDownloadModal(); }
+});
+
+// ─── INIT ───
+updateBadges();
+</script>
+</body>
+</html>
